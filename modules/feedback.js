@@ -23,13 +23,13 @@ const openFeedbackModal = () => {
             `,
             footerButtons: `
                 <div style="display: flex; flex-direction: column; gap: 12px; width: 100%; margin-top: 10px;">
-                    <a href="https://forms.gle/KgAxNuP7fNCpB3gt6" id="feedbackGoogleFormBtn" target="_blank" rel="noopener" class="action-btn" style="flex: 1.25; border-radius: 8px; font-weight: 600; font-size: 1.1rem; text-align: center; display: block; background: linear-gradient(90deg, #5a7fff 0%, #a259ff 100%); color: #fff; margin-bottom: 8px;">Open Suggestion Form</a>
+                    <a href="https://forms.gle/KgAxNuP7fNCpB3gt6" id="feedbackGoogleFormBtn" target="_blank" rel="noopener" class="action-btn" style="flex: 1.25; border-radius: 8px; font-weight: 600; font-size: 1.1rem; text-align: center; display: block; background: linear-gradient(90deg, #5a7fff 0%, #a259ff 100%); color: #fff; margin-bottom: 8px;">Open Form</a>
                     <button class="action-btn secondary" style="flex: 1.25; border-radius: 8px; font-weight: 600;" onclick="closeModal('universalModal')">Close</button>
                 </div>
             `,
             size: 'modal-sm'
         });
-        // Cuando tengas el link, reemplaza '#' por el enlace real del Google Form en el href de feedbackGoogleFormBtn
+        
     }
 };
 

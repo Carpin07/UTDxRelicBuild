@@ -995,7 +995,7 @@ const unitDatabase = [
     role: "Damage",
     img: "images/units/AntKingSavage.png",
     totalCost: 61000,
-    placement: 1,
+    placement: 2,
     tags: ["Leveling", "King"],
     meta: { 
         short: "Ruler",
@@ -1041,8 +1041,8 @@ const unitDatabase = [
 ];
 
 const creditsData = [
-    { role: "Owner", name: "NotAlvich.", id: "NotAlvich.", userId: "1242123169272434699", pfp: "images/pfp/NotAlvich.png", type: "Owner" },
-    { role: "Helper", name: "makar24563.", id: "makar24563.", userId: "452398326667673611", pfp: "images/pfp/makar24563.png", type: "Helper" },
-    { role: "OldOwner", name: "xKing.", id: "xking.", userId: "347578773857632258", pfp: "images/pfp/xking.png", type: "OldOwner" },
+    { role: "Owner", name: "NotAlvich", id: "NotAlvich.", userId: "1242123169272434699", pfp: "images/pfp/NotAlvich.png", type: "Owner" },
+    { role: "Helper", name: "makar24563", id: "makar24563.", userId: "452398326667673611", pfp: "images/pfp/makar24563.png", type: "Helper" },
+    { role: "OldOwner", name: "xKing", id: "xking.", userId: "347578773857632258", pfp: "images/pfp/xking.png", type: "OldOwner" },
     { role: "OldHelper", name: "xAuroraFlare", id: "xauroraflare", userId: "216293393888837632", pfp: "images/pfp/xauroraflare.gif", type: "OldHelper" }
 ];

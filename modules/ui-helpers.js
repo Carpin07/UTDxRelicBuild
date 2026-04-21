@@ -763,7 +763,6 @@ function renderCredits() {
             <div class="badge-content">
                 ${c.pfp ? `<img src="${c.pfp}" class="badge-pfp" alt="${c.name}">` : ''}
                 <span class="badge-name">${c.name}</span>
-                ${discordLogo}
                 ${linkButtonHtml}
             </div>
         </div>
