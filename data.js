@@ -981,8 +981,7 @@ const unitDatabase = [
         ]
     },
 
-
-    {
+   {
     id: "ant_king_savage",
     name: "Ant King (Savage)",
     role: "Damage",
@@ -996,16 +995,16 @@ const unitDatabase = [
         note: "Really good with ruler"
     },
     stats: { 
-        dmg: 2000,
-        spa: 5.47,
-        range: 28.4,
+        dmg: 7800, // 20 % dmg if sjw is in range // +1 % dmg per kill up to 30 % (50 % at E2)
+        spa: 5,
+        range: 50, // +10 % range if sjw is in range
         trueDmgPct: 30,
         dotStacks: 1,
         crit: 0,
         cdmg: 150,
-        spaCap: 1,      // O el mínimo que quieras permitir
+        spaCap: 5,      
         dot: 0,
-        dotDuration: 0,
+        element: "Dark",
         passiveDmg: 0,
     },
     passives: [
@@ -1015,14 +1014,18 @@ const unitDatabase = [
         },
         {
             name: "Monarch's Devotion",
-            desc: "When Jinoo is in range: +20% Damage and +10% Range."
+            desc: "When Jinoo is in range: +20% Damage and +10% Range.",
+            dmg: 20,
+            range: 10
         }
     ],
     etherealization: [
-        "Ethereal 1 / 3 / 5: +10 Stat Points each",
-        "Ethereal 2  Paralyzing Venom: Radiation Damage increased to 80% and Slow increased to 20%",
-        "Ethereal 4: When Monarch's Devotion triggers, all units in range gain +10% Damage",
-        "Ethereal 6: Predatory Gluttony damage cap increased to +50%"
+        " +10 Stat Points each",
+        " Paralyzing Venom: Radiation Damage increased to 80% and Slow increased to 20%",
+         "+10 Stat Points each",
+        " When Monarch's Devotion triggers, all units in range gain +10% Damage",
+         "+10 Stat Points each",
+        "Predatory Gluttony damage cap increased to +50%",
     ],
     isCalculated: true
 }
@@ -1030,6 +1033,8 @@ const unitDatabase = [
 ];
 
 const creditsData = [
-    { role: "Owner", name: "xKing.", id: "xking.", userId: "347578773857632258", pfp: "images/pfp/xking.png", type: "owner" },
-    { role: "Helper", name: "xAuroraFlare", id: "xauroraflare", userId: "216293393888837632", pfp: "images/pfp/xauroraflare.gif", type: "helper" }
+    { role: "Owner", name: "NotAlvich.", id: "NotAlvich.", userId: "1242123169272434699", pfp: "images/pfp/NotAlvich.png", type: "Owner" },
+    { role: "Helper", name: "makar24563.", id: "makar24563.", userId: "452398326667673611", pfp: "images/pfp/makar24563.png", type: "Helper" },
+    { role: "OldOwner", name: "xKing.", id: "xking.", userId: "347578773857632258", pfp: "images/pfp/xking.png", type: "OldOwner" },
+    { role: "OldHelper", name: "xAuroraFlare", id: "xauroraflare", userId: "216293393888837632", pfp: "images/pfp/xauroraflare.gif", type: "OldHelper" }
 ];
