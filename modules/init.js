@@ -74,7 +74,7 @@ function initApp() {
                     `,
                     footerButtons: `
                         <div style="display: flex; gap: 12px; width: 100%; margin-top: 10px;">
-                            <button class="action-btn" style="flex: 1.25; border-radius: 8px; font-weight: 600;" onclick="localStorage.setItem('eol_notice_hidden_v2', 'true'); closeModal('universalModal')">OK</button>
+                            <button class="action-btn" style="flex: 1.25; border-radius: 8px; font-weight: 600;" onclick="localStorage.setItem('eol_notice_hidden_v2', 'true'); closeModal('universalModal')">Ok</button>
                         </div>
                     `,
                     size: 'modal-sm'
