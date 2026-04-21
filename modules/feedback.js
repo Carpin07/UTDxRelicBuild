@@ -5,13 +5,33 @@
 const WORKER_URL = "https://suggestion-bugreport.wavebound.workers.dev"; // User to replace this
 
 const openFeedbackModal = () => {
-    toggleModal('feedbackModal', true);
-    // Reset form
-    document.getElementById('feedbackType').value = 'suggestion';
-    document.getElementById('feedbackContact').value = ''; // <--- Add reset here
-    document.getElementById('feedbackText').value = '';
-    document.getElementById('feedbackStatus').innerHTML = '';
-    document.getElementById('feedbackSendBtn').disabled = false;
+    if (typeof showUniversalModal === 'function') {
+        showUniversalModal({
+            title: '<span style="color: var(--text-color, #fff); font-size: 1.1rem; letter-spacing: 1px; font-weight: 600;">Feature Disabled</span>',
+            content: `
+                <div style="text-align: center; padding: 25px 20px 10px; color: #e0e0e0; font-family: var(--font-main);">
+                    <div style="margin-bottom: 24px; color: #fff;">
+                        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display: block; margin: 0 auto; filter: drop-shadow(0 0 12px rgba(255,255,255,0.15)); opacity: 0.9;">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                    </div>
+                    <h3 style="font-size: 1.35rem; font-weight: 700; font-family: var(--font-header); margin-bottom: 16px; color: #ffffff;">This Feature is Disabled</h3>
+                    <p style="font-size: 0.95rem; color: #a0a0a5; margin: 0 auto 16px auto; line-height: 1.6;">
+                        If you want to report a bug or suggestion, just DM me (<b>NotAlvich</b>) directly.<br><br>
+                        Thank you for your understanding!
+                    </p>
+                </div>
+            `,
+            footerButtons: `
+                <div style="display: flex; gap: 12px; width: 100%; margin-top: 10px;">
+                    <button class="action-btn" style="flex: 1.25; border-radius: 8px; font-weight: 600;" onclick="closeModal('universalModal')">OK</button>
+                </div>
+            `,
+            size: 'modal-sm'
+        });
+    }
 };
 
 async function sendFeedback() {
