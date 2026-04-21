@@ -32,7 +32,9 @@ const patchNotesData = [
          date: "Apr 21, 2026",
         changes: [
             { type: "Unit", text: "<b>New Units:</b> Added <b>Ant King (Savage)</b>." },
-            { type: "UI", text: "<b>Credits Page:</b> Added a new Credits page to acknowledge all contributors to the project, past and present." },    
+            { type: "UI", text: "<b>Credits Page:</b> Added a new Credits page to acknowledge all contributors to the project, past and present." },
+            { type: "Rework", text:" Quick rework on the colors of the roles, and added new role icons, eliminated the discord icon"},
+            {type: "Feature", text:" New Feature Added Report / Suggestions form now it is a google form which I find it more easier to track the responses"}
         ],
     },
     {
