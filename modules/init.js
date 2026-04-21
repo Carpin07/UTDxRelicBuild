@@ -64,7 +64,7 @@ function initApp() {
                                 </svg>
                             </div>
                             
-                            <h3 style="font-size: 1.35rem; font-weight: 700; font-family: var(--font-header); margin-bottom: 16px; color: #ffffff;">Development Paused</h3>
+                            <h3 style="font-size: 1.35rem; font-weight: 700; font-family: var(--font-header); margin-bottom: 16px; color: #ffffff;">Development Continues</h3>
                             
                                 <p style="font-size: 0.95rem; color: #a0a0a5; margin: 0 auto 16px auto; line-height: 1.6;">
                                     Special thanks to the developers of the previous website. I, Alvich, am resuming this project with the hope of doing things right and making the former developers proud.<br><br>
