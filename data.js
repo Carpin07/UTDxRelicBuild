@@ -34,7 +34,8 @@ const patchNotesData = [
             { type: "Unit", text: "<b>New Units:</b> Added <b>Ant King (Savage)</b>." },
             { type: "UI", text: "<b>Credits Page:</b> Added a new Credits page to acknowledge all contributors to the project, past and present." },    
         ],
-
+    },
+    {
         version: "v4.8",
         date: "Apr 18, 2026",
         changes: [
