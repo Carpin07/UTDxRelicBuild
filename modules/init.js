@@ -66,19 +66,15 @@ function initApp() {
                             
                             <h3 style="font-size: 1.35rem; font-weight: 700; font-family: var(--font-header); margin-bottom: 16px; color: #ffffff;">Development Paused</h3>
                             
-                            <p style="font-size: 0.95rem; color: #a0a0a5; margin: 0 auto 16px auto; line-height: 1.6;">
-                                Heads up: this tool is no longer actively maintained. We likely won't be pushing any new features or adding new units going forward.
-                            </p>
-
-                            <p style="font-size: 0.9rem; color: #808088; max-width: 90%; margin: 0 auto; line-height: 1.6;">
-                                Thanks to everyone who supported the site and used it along the way.
-                            </p>
+                                <p style="font-size: 0.95rem; color: #a0a0a5; margin: 0 auto 16px auto; line-height: 1.6;">
+                                    Special thanks to the developers of the previous website. I, Alvich, am resuming this project with the hope of doing things right and making the former developers proud.<br><br>
+                                    My goal is to provide this community with the latest units, their relics, and the most meta sets. Thank you very much for your trust and support.
+                                </p>
                         </div>
                     `,
                     footerButtons: `
                         <div style="display: flex; gap: 12px; width: 100%; margin-top: 10px;">
-                            <button class="action-btn secondary" style="flex: 1; border-radius: 8px; font-weight: 600;" onclick="closeModal('universalModal')">Close</button>
-                            <button class="action-btn" style="flex: 1.25; border-radius: 8px; font-weight: 600;" onclick="localStorage.setItem('eol_notice_hidden_v2', 'true'); closeModal('universalModal')">Don't Show Again</button>
+                            <button class="action-btn" style="flex: 1.25; border-radius: 8px; font-weight: 600;" onclick="localStorage.setItem('eol_notice_hidden_v2', 'true'); closeModal('universalModal')">OK</button>
                         </div>
                     `,
                     size: 'modal-sm'
