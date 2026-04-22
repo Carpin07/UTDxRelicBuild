@@ -289,37 +289,37 @@ function updateBuildListDisplay(unitId, forceSync = false, renderLimit = 150) {
         }
     }
 
-    if (buildData) {
+   // if (buildData) {
         // Calcular ranking global solo para el mejor build de cada unidad
         // 1. Obtener todos los mejores builds
-        const allUnits = unitDatabase.map(u => {
-            let builds = window.unitBuildsCache[u.id]?.[activeType]?.[activeMode]?.[activeCfg] || [];
-            if (!builds.length) return null;
-            builds = builds.map(b => b && b.dps !== undefined ? b : null).filter(Boolean);
-            if (!builds.length) return null;
+       // const allUnits = unitDatabase.map(u => {
+      //      let builds = window.unitBuildsCache[u.id]?.[activeType]?.[activeMode]?.[activeCfg] || [];
+      //      if (!builds.length) return null;
+      //      builds = builds.map(b => b && b.dps !== undefined ? b : null).filter(Boolean);
+     //       if (!builds.length) return null;
             // Mejor build = mayor DPS
-            const best = builds.reduce((a, b) => (b.dps > a.dps ? b : a), builds[0]);
-            return { id: u.id, best };
-        }).filter(Boolean);
+     //       const best = builds.reduce((a, b) => (b.dps > a.dps ? b : a), builds[0]);
+   //         return { id: u.id, best };
+    //    }).filter(Boolean);
         // 2. Ordenar por DPS descendente
-        allUnits.sort((a, b) => b.best.dps - a.best.dps);
+   //     allUnits.sort((a, b) => b.best.dps - a.best.dps);
         // 3. Mapear id -> ranking
-        const rankMap = {};
-        allUnits.forEach((u, idx) => { rankMap[u.id] = idx; });
+   //     const rankMap = {};
+   //     allUnits.forEach((u, idx) => { rankMap[u.id] = idx; });
         // 4. Añadir globalRank al mejor build de cada unidad
-        buildData.forEach((b, idx) => {
-            if (idx === 0 && rankMap[unitId] !== undefined) b.globalRank = rankMap[unitId];
-            else b.globalRank = null;
-        });
-        container.innerHTML = renderListInternal(buildData, renderLimit);
-    } else if (forceSync && unitObj) {
-        processUnitCache(unitObj, activeCfg, activeType);
-        const finalData = window.unitBuildsCache[unitId]?.[activeType]?.[activeMode]?.[activeCfg];
-        if (finalData) container.innerHTML = renderListInternal(finalData, renderLimit);
-    } else {
-        container.innerHTML = `<div class="msg-loading"><div class="loading-spinner"></div><span>Calculating...</span></div>`;
-    }
-}
+  //      buildData.forEach((b, idx) => {
+   //         if (idx === 0 && rankMap[unitId] !== undefined) b.globalRank = rankMap[unitId];
+   //         else b.globalRank = null;
+    //    });
+  //      container.innerHTML = renderListInternal(buildData, renderLimit);
+ //   } else if (forceSync && unitObj) {
+  //      processUnitCache(unitObj, activeCfg, activeType);
+  //      const finalData = window.unitBuildsCache[unitId]?.[activeType]?.[activeMode]?.[activeCfg];
+   //     if (finalData) container.innerHTML = renderListInternal(finalData, renderLimit);
+  //  } else {
+   //     container.innerHTML = `<div class="msg-loading"><div class="loading-spinner"></div><span>Calculating...</span></div>`;
+    //}
+//}
 
 function processUnitCache(unit, specificCfg = null, specificType = null) {
     if (!window.unitBuildsCache[unit.id]) {
