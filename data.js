@@ -265,7 +265,7 @@ const BAMBIETTA_MODES = {
 };
 
 const setBonuses = {
-    laughing: { dmg: 5, spa: 5, cf: 0, cm: 0, range: 0 },
+    laughing: { dmg: 5, spa: 5, cf: 0, cm: 0, range: 5 },
     ninja: { dmg: 5, spa: 0, cf: 0, cm: 0, range: 0 },
     sun_god: { dmg: 5, spa: 0, cf: 0, cm: 0, range: 0 },
     ex: { dmg: 0, spa: 0, cf: 10, cm: 25, range: 0 },
@@ -957,8 +957,8 @@ const unitDatabase = [
             crit: 0, cdmg: 150, dot: 60, dotDuration: 10, 
             element: "Light",
             passiveDmg: 40,  // Base Experience (20) + DPS (20)
-            passiveSpa: -40, // DPS Speed Penalty
-            bossDmg: 50,     // DPS Boss Killer
+            passiveSpa: -40, // ty
+            bossDmg: 50,     // DDPS Speed PenalPS Boss Killer
             dotBuff: 20      // Lower DoT effectiveness in DPS mode
         },
         modes: {
@@ -1005,9 +1005,9 @@ const unitDatabase = [
         note: "Really good with ruler"
     },
     stats: { 
-        dmg: 7800, // 20 % dmg if sjw is in range // +1 % dmg per kill up to 30 % (50 % at E2)
-        spa: 5,
-        range: 50, // +10 % range if sjw is in range
+        dmg: 4300, 
+        spa: 8,
+        range: 40, 
         trueDmgPct: 30,
         dotStacks: 1,
         crit: 0,
