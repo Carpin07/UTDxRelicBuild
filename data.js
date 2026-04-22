@@ -996,7 +996,7 @@ const unitDatabase = [
     name: "Ant King (Savage)",
     role: "Damage",
     img: "images/units/AntKingSavage.png",
-    totalCost: 61000,
+    totalCost: 63000,
     placement: 2,
     tags: ["Leveling", "King"],
     meta: { 
@@ -1012,10 +1012,10 @@ const unitDatabase = [
         dotStacks: 1,
         crit: 0,
         cdmg: 150,
-        spaCap: 5,      
+        spaCap: 2,      
         dot: 0,
         element: "Dark",
-        passiveDmg: 0,
+        passiveDmg: 30,
     },
     passives: [
         {

@@ -133,6 +133,11 @@ function generateBuildRowHTML(r, i, unitConfig = {}) {
     let displayVal = format(r.dps), displayLabel = "DPS";
     if (sortMode === 'range') { displayVal = (r.range || 0).toFixed(1); displayLabel = "RNG"; }
     
+    // Badge Top DPS solo para el mejor build (i === 0)
+    let topDpsBadge = '';
+    if (i === 0) {
+        topDpsBadge = `<span class="top-dps-badge" style="margin-left:8px;display:inline-block;padding:2px 10px;border-radius:12px;font-size:0.85em;font-weight:700;background: linear-gradient(90deg, #ff3a3a 0%, #ff7e5f 100%);color:#fff;box-shadow:0 2px 8px rgba(255,58,58,0.15);border:1.5px solid #ff7e5f;letter-spacing:0.5px;">Top ${r.globalRank + 1} DPS</span>`;
+    }
     return `
         <div class="build-row ${rankClass} ${sortMode === 'efficiency' ? 'is-efficiency-sort' : ''}">
             <div class="br-header">
@@ -147,6 +152,7 @@ function generateBuildRowHTML(r, i, unitConfig = {}) {
                 </div>
                 <div class="br-res-col">
                     <button class="info-btn" onclick="showMath('${r.id}')">?</button>
+                    ${topDpsBadge}
                     <div class="eff-score-line" onclick="event.stopPropagation(); openInfoPopup('efficiency')">${effScore} <span class="eff-label">Eff</span></div>
                     <div class="dps-container"><span class="build-dps">${displayVal}</span><span class="dps-label">${displayLabel}</span></div>
                 </div>
@@ -284,6 +290,27 @@ function updateBuildListDisplay(unitId, forceSync = false, renderLimit = 150) {
     }
 
     if (buildData) {
+        // Calcular ranking global solo para el mejor build de cada unidad
+        // 1. Obtener todos los mejores builds
+        const allUnits = unitDatabase.map(u => {
+            let builds = window.unitBuildsCache[u.id]?.[activeType]?.[activeMode]?.[activeCfg] || [];
+            if (!builds.length) return null;
+            builds = builds.map(b => b && b.dps !== undefined ? b : null).filter(Boolean);
+            if (!builds.length) return null;
+            // Mejor build = mayor DPS
+            const best = builds.reduce((a, b) => (b.dps > a.dps ? b : a), builds[0]);
+            return { id: u.id, best };
+        }).filter(Boolean);
+        // 2. Ordenar por DPS descendente
+        allUnits.sort((a, b) => b.best.dps - a.best.dps);
+        // 3. Mapear id -> ranking
+        const rankMap = {};
+        allUnits.forEach((u, idx) => { rankMap[u.id] = idx; });
+        // 4. Añadir globalRank al mejor build de cada unidad
+        buildData.forEach((b, idx) => {
+            if (idx === 0 && rankMap[unitId] !== undefined) b.globalRank = rankMap[unitId];
+            else b.globalRank = null;
+        });
         container.innerHTML = renderListInternal(buildData, renderLimit);
     } else if (forceSync && unitObj) {
         processUnitCache(unitObj, activeCfg, activeType);
