@@ -136,11 +136,6 @@ function generateBuildRowHTML(r, i, unitConfig = {}) {
     let displayVal = format(r.dps), displayLabel = "DPS";
     if (sortMode === 'range') { displayVal = (r.range || 0).toFixed(1); displayLabel = "RNG"; }
 
-    let topDpsBadge = '';
-    if (i === 0) {
-        topDpsBadge = `<span class="top-dps-badge" style="margin-left:8px;display:inline-block;padding:2px 10px;border-radius:12px;font-size:0.85em;font-weight:700;background: linear-gradient(90deg, #ff3a3a 0%, #ff7e5f 100%);color:#fff;box-shadow:0 2px 8px rgba(255,58,58,0.15);border:1.5px solid #ff7e5f;letter-spacing:0.5px;">Top ${r.globalRank + 1} DPS</span>`;
-    }
-
     return `
         <div class="build-row ${rankClass} ${sortMode === 'efficiency' ? 'is-efficiency-sort' : ''}">
             <div class="br-header">
@@ -155,7 +150,6 @@ function generateBuildRowHTML(r, i, unitConfig = {}) {
                 </div>
                 <div class="br-res-col">
                     <button class="info-btn" onclick="showMath('${r.id}')">?</button>
-                    ${topDpsBadge}
                     <div class="eff-score-line" onclick="event.stopPropagation(); openInfoPopup('efficiency')">${effScore} <span class="eff-label">Eff</span></div>
                     <div class="dps-container"><span class="build-dps">${displayVal}</span><span class="dps-label">${displayLabel}</span></div>
                 </div>
@@ -295,6 +289,47 @@ function updateBuildListDisplay(unitId, forceSync = false, renderLimit = 150) {
     } else {
         container.innerHTML = `<div class="msg-loading"><div class="loading-spinner"></div><span>Calculating...</span></div>`;
     }
+
+    // --- GLOBAL RANKING: calculate Top N DPS badge and place it next to the Info button ---
+    try {
+        const allScores = unitDatabase.map(u => {
+            const isAbil = activeAbilityIds.has(u.id) && u.ability;
+            const uType = isAbil ? 'abil' : 'base';
+            const builds = window.unitBuildsCache[u.id]?.[uType]?.[activeMode]?.[activeCfg];
+            if (!builds || builds.length === 0) return { id: u.id, score: getQuickScore(u) };
+            const best = builds.reduce((a, b) => (b.dps > a.dps ? b : a), builds[0]);
+            return { id: u.id, score: best.dps || 0 };
+        });
+        allScores.sort((a, b) => b.score - a.score);
+        const rankIndex = allScores.findIndex(x => x.id === unitId);
+        const rank = rankIndex >= 0 ? rankIndex + 1 : null;
+
+        if (rank !== null) {
+            const cardEl = document.getElementById('card-' + unitId);
+            if (cardEl) {
+                // Remove old badge if re-rendering
+                const old = cardEl.querySelector('.unit-global-rank-badge');
+                if (old) old.remove();
+
+                const badge = document.createElement('span');
+                badge.className = 'unit-global-rank-badge';
+                badge.style.cssText = `
+                    display:inline-flex; align-items:center; padding:2px 10px;
+                    border-radius:12px; font-size:0.82em; font-weight:700;
+                    background: linear-gradient(90deg, #ff3a3a 0%, #ff7e5f 100%);
+                    color:#fff; box-shadow:0 2px 8px rgba(255,58,58,0.18);
+                    border:1.5px solid #ff7e5f; letter-spacing:0.5px; white-space:nowrap;
+                `;
+                badge.textContent = `Top ${rank} DPS`;
+
+                // Insert right before the ⓘ Info button inside .ut-actions
+                const infoBtn = cardEl.querySelector('.ut-actions .calc-btn:last-child');
+                if (infoBtn) {
+                    infoBtn.parentElement.insertBefore(badge, infoBtn);
+                }
+            }
+        }
+    } catch (e) { console.warn('Global rank badge error', e); }
 }
 
 function processUnitCache(unit, specificCfg = null, specificType = null) {
