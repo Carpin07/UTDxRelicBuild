@@ -1021,9 +1021,11 @@ const unitDatabase = [
         crit: 0,
         cdmg: 150,
         spaCap: 2,      
-        dot: 0,
+        dot: 80,
         element: "Dark",
         passiveDmg: 30,
+        dotDuration: 6,
+
     },
     passives: [
         {
@@ -1035,6 +1037,11 @@ const unitDatabase = [
             desc: "When Jinoo is in range: +20% Damage and +10% Range.",
             dmg: 20,
             range: 10
+        },
+        {
+            name: "Paralizying Venom",
+            desc: "Every attack: Applies Radiation for 60 % (80% at E2) of unit damage over 5s and 15% Slow (20% at E2) while Radiation is active:"
+
         }
     ],
     etherealization: [
