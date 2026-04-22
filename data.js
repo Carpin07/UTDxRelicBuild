@@ -27,6 +27,14 @@ const SUB_NAMES = {
 };
 
 const patchNotesData = [
+        {
+        version: "v5.1",
+         date: "Apr 22, 2026",
+        changes: [
+            { type: "Unit", text: "Changed some stuff on the unit of Ant King that were not correctly measured" },
+            {type: "Feature", text:" New Feature Added: <b> Dps ranking </b> Now on each unit it shows the current top in dps throughout all the units in the game"}
+        ],
+    },
     {
         version: "v5.0",
          date: "Apr 21, 2026",
