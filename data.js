@@ -1023,7 +1023,7 @@ const unitDatabase = [
         spaCap: 2,      
         dot: 80,
         element: "Dark",
-        passiveDmg: 30,
+        passiveDmg: 50, // Predatory Gluttony
         dotDuration: 6,
 
     },
