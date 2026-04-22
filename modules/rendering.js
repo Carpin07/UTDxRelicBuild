@@ -14,7 +14,7 @@ const unitControls = {
     },
     bambietta: (unit) => {
         const currentEl = bambiettaState.element;
-        const options = Object.keys(BAMBIETTA_MODES).map(k => 
+        const options = Object.keys(BAMBIETTA_MODES).map(k =>
             `<option value="${k}" ${currentEl === k ? 'selected' : ''}>${k} (${BAMBIETTA_MODES[k].desc})</option>`
         ).join('');
         return `<div class="unit-toolbar custom-toolbar"><div class="bambi-wrapper"><span class="bambi-label">Element:</span><select onchange="setBambiettaElement(this.value, this)" class="bambi-select">${options}</select></div></div>`;
@@ -22,7 +22,7 @@ const unitControls = {
     robot1718: (unit) => {
         const currentMode = robot1718State.mode;
         if (!unit.modes) return '';
-        const options = Object.keys(unit.modes).map(k => 
+        const options = Object.keys(unit.modes).map(k =>
             `<option value="${k}" ${currentMode === k ? 'selected' : ''}>${k} (${unit.modes[k].desc})</option>`
         ).join('');
         return `<div class="unit-toolbar custom-toolbar"><div class="bambi-wrapper" style="display: flex; align-items: center; width: 100%;"><span class="bambi-label" style="margin-right: 6px;">Form:</span><select onchange="setRobot1718Mode(this.value, this)" class="bambi-select" style="flex: 1;">${options}</select></div></div>`;
@@ -40,7 +40,7 @@ function createBaseUnitCard(unit, options = {}) {
     if (id) card.id = id;
 
     const banner = `<div class="unit-banner">${bannerContent}</div>`;
-    const tags = tagsContent ? `<div class="unit-tags custom-tags">${tagsContent}</div>` : 
+    const tags = tagsContent ? `<div class="unit-tags custom-tags">${tagsContent}</div>` :
                  (unit.tags && unit.tags.length > 0 ? `<div class="unit-tags">${unit.tags.map(t => `<span class="unit-tag">${t}</span>`).join('')}</div>` : '');
 
     card.innerHTML = `${banner}${tags}${topControls}${getUnitControlsHtml(unit)}${bottomControls}${mainContent}`;
@@ -58,7 +58,6 @@ function calculateBuildEfficiency(build, unitCost, unitMaxPlacement, unitId) {
         traitLimit = foundTrait.limitPlace;
     }
 
-    // Check for Ability Placement Limit
     if (build.id && build.id.includes('ABILITY') && unitObj && unitObj.ability && unitObj.ability.limitPlace) {
         traitLimit = traitLimit ? Math.min(traitLimit, unitObj.ability.limitPlace) : unitObj.ability.limitPlace;
     }
@@ -88,7 +87,7 @@ function getHeadBadgeHtml(headUsed) {
 
 function generateBuildRowHTML(r, i, unitConfig = {}) {
     const { totalCost = 50000, placement = 1, sortMode = 'dps', unitId = '', benchmarkDps = 0 } = unitConfig;
-    
+
     let rankClass = (i < 3 ? `rank-${i+1}` : 'rank-other') + (r.isCustom ? ' is-custom' : '');
     const effScore = calculateBuildEfficiency(r, totalCost, placement, unitId).toFixed(3);
 
@@ -99,11 +98,15 @@ function generateBuildRowHTML(r, i, unitConfig = {}) {
         if (optPct >= 95) { color = '#00ffaa'; glow = 'rgba(0, 255, 170, 0.15)'; }
         else if (optPct >= 80) { color = '#ffcc00'; glow = 'rgba(255, 204, 0, 0.15)'; }
         else { color = '#ff4d4d'; glow = 'rgba(255, 77, 77, 0.15)'; }
-        
+
         optimalityHtml = `<div class="optimality-badge" style="color: ${color}; border-color: ${color}66; --glow-color: ${glow};"><span class="opt-label" style="color: ${color}">OPTIMALITY</span><span class="opt-pct">${optPct.toFixed(1)}%</span></div>`;
     }
 
-    const prioConfig = { 'spa': { label: 'SPA STAT', cls: 'prio-spa' }, 'range': { label: 'RANGE STAT', cls: 'prio-range' }, 'default': { label: 'DMG STAT', cls: 'prio-dmg' } };
+    const prioConfig = {
+        'spa': { label: 'SPA STAT', cls: 'prio-spa' },
+        'range': { label: 'RANGE STAT', cls: 'prio-range' },
+        'default': { label: 'DMG STAT', cls: 'prio-dmg' }
+    };
 
     let prioHtml = '';
     if (r.relicIds) {
@@ -127,17 +130,17 @@ function generateBuildRowHTML(r, i, unitConfig = {}) {
     const headRow = (r.headUsed && r.headUsed !== 'none') ? `<div class="stat-line"><span class="sl-label">SUB</span> ${getRichBadgeHtml(s.head || [])}</div>` : '';
     const bodyRow = `<div class="stat-line"><span class="sl-label">BODY</span> ${getRichBadgeHtml(s.body || [])}</div>`;
     const legsRow = `<div class="stat-line"><span class="sl-label">LEGS</span> ${getRichBadgeHtml(s.legs || [])}</div>`;
-    
+
     const mobileToggle = `<button class="mobile-stat-toggle" onclick="toggleRelicStatDisplay(this)"><span class="m-toggle-txt">Main</span><span class="m-toggle-txt">Sub</span></button>`;
-    
+
     let displayVal = format(r.dps), displayLabel = "DPS";
     if (sortMode === 'range') { displayVal = (r.range || 0).toFixed(1); displayLabel = "RNG"; }
-    
-    // Badge Top DPS solo para el mejor build (i === 0)
+
     let topDpsBadge = '';
     if (i === 0) {
         topDpsBadge = `<span class="top-dps-badge" style="margin-left:8px;display:inline-block;padding:2px 10px;border-radius:12px;font-size:0.85em;font-weight:700;background: linear-gradient(90deg, #ff3a3a 0%, #ff7e5f 100%);color:#fff;box-shadow:0 2px 8px rgba(255,58,58,0.15);border:1.5px solid #ff7e5f;letter-spacing:0.5px;">Top ${r.globalRank + 1} DPS</span>`;
     }
+
     return `
         <div class="build-row ${rankClass} ${sortMode === 'efficiency' ? 'is-efficiency-sort' : ''}">
             <div class="br-header">
@@ -167,7 +170,6 @@ function updateBuildListDisplay(unitId, forceSync = false, renderLimit = 150) {
     const unitCost = unitObj ? (unitObj.totalCost || 50000) : 50000;
     const unitPlace = unitObj ? (unitObj.placement || 1) : 1;
 
-    // Use globals or shared state to avoid classList lookups 30+ times per frame
     const activeMode = 'fixed';
     const showHead = document.body.classList.contains('show-head');
     const showSubs = document.body.classList.contains('show-subs');
@@ -190,13 +192,12 @@ function updateBuildListDisplay(unitId, forceSync = false, renderLimit = 150) {
     const prioSelect = card.querySelector('select[data-filter="prio"]')?.value || 'all';
     const setSelect = card.querySelector('select[data-filter="set"]')?.value || 'all';
     const headSelect = card.querySelector('select[data-filter="head"]')?.value || 'all';
-    const sortSelect = card.querySelector('select[data-filter="sort"]')?.value || 'dps'; 
+    const sortSelect = card.querySelector('select[data-filter="sort"]')?.value || 'dps';
 
     const hydrateBuildEntry = (r) => {
         if (!r) return null;
-        if (r.id && r.mainStats && r.setName) return r; // Already fully hydrated
-        
-        // Map raw/short keys (d, dv, ra, sp, p, s, t, h, ms, ss) to full names
+        if (r.id && r.mainStats && r.setName) return r;
+
         const res = {
             id: r.id || `db-${unitId}-${Math.random().toString(36).substr(2, 9)}`,
             traitName: (typeof r.t === 'number' ? (traitsList[r.t]?.name) : (r.traitName || r.t)) || 'Unknown Trait',
@@ -218,7 +219,7 @@ function updateBuildListDisplay(unitId, forceSync = false, renderLimit = 150) {
     };
 
     const renderListInternal = (builds, limit) => {
-        if(!builds || builds.length === 0) return '<div class="msg-empty">No valid builds found.</div>';
+        if (!builds || builds.length === 0) return '<div class="msg-empty">No valid builds found.</div>';
 
         let filtered = builds.map(hydrateBuildEntry).filter(r => {
             if (!r) return false;
@@ -232,7 +233,6 @@ function updateBuildListDisplay(unitId, forceSync = false, renderLimit = 150) {
             return searchText.includes(searchInput);
         });
 
-        // PERFORMANCE: If no filters are active, skip processing hidden builds
         const hasActiveFilters = setSelect !== 'all' || headSelect !== 'all' || searchInput !== '';
         if (!hasActiveFilters && filtered.length > limit) {
             filtered = filtered.slice(0, limit);
@@ -269,17 +269,14 @@ function updateBuildListDisplay(unitId, forceSync = false, renderLimit = 150) {
         });
 
         const slice = filtered.slice(0, limit);
-        return slice.map((r, i) => generateBuildRowHTML(r, i, { totalCost: unitCost, placement: unitPlace, sortMode: sortSelect, unitId, benchmarkDps: benchmarkDps })).join('');
+        return slice.map((r, i) => generateBuildRowHTML(r, i, { totalCost: unitCost, placement: unitPlace, sortMode: sortSelect, unitId, benchmarkDps })).join('');
     };
 
-    // PERFORMANCE: Only target the active container. 
-    // CSS handles hiding the others via .mode-base/.abil classes on the card.
     const container = document.getElementById(`results-${activeType}-${activeMode}-${activeCfg}-${unitId}`);
     if (!container) return;
 
     let buildData = window.unitBuildsCache[unitId]?.[activeType]?.[activeMode]?.[activeCfg];
 
-    // Optimization: Try to populate from Static DB immediately to avoid loading flicker
     if (!buildData && !inventoryMode && unitObj) {
         const isBambiAlt = (unitId === 'bambietta' && bambiettaState.element !== 'Dark');
         const isRobotAlt = (unitId === 'robot1718' && robot1718State.mode !== 'Robot 17');
@@ -289,67 +286,46 @@ function updateBuildListDisplay(unitId, forceSync = false, renderLimit = 150) {
         }
     }
 
-   // if (buildData) {
-        // Calcular ranking global solo para el mejor build de cada unidad
-        // 1. Obtener todos los mejores builds
-       // const allUnits = unitDatabase.map(u => {
-      //      let builds = window.unitBuildsCache[u.id]?.[activeType]?.[activeMode]?.[activeCfg] || [];
-      //      if (!builds.length) return null;
-      //      builds = builds.map(b => b && b.dps !== undefined ? b : null).filter(Boolean);
-     //       if (!builds.length) return null;
-            // Mejor build = mayor DPS
-     //       const best = builds.reduce((a, b) => (b.dps > a.dps ? b : a), builds[0]);
-   //         return { id: u.id, best };
-    //    }).filter(Boolean);
-        // 2. Ordenar por DPS descendente
-   //     allUnits.sort((a, b) => b.best.dps - a.best.dps);
-        // 3. Mapear id -> ranking
-   //     const rankMap = {};
-   //     allUnits.forEach((u, idx) => { rankMap[u.id] = idx; });
-        // 4. Añadir globalRank al mejor build de cada unidad
-  //      buildData.forEach((b, idx) => {
-   //         if (idx === 0 && rankMap[unitId] !== undefined) b.globalRank = rankMap[unitId];
-   //         else b.globalRank = null;
-    //    });
-  //      container.innerHTML = renderListInternal(buildData, renderLimit);
- //   } else if (forceSync && unitObj) {
-  //      processUnitCache(unitObj, activeCfg, activeType);
-  //      const finalData = window.unitBuildsCache[unitId]?.[activeType]?.[activeMode]?.[activeCfg];
-   //     if (finalData) container.innerHTML = renderListInternal(finalData, renderLimit);
-  //  } else {
-   //     container.innerHTML = `<div class="msg-loading"><div class="loading-spinner"></div><span>Calculating...</span></div>`;
-    //}
-//}
+    if (buildData) {
+        container.innerHTML = renderListInternal(buildData, renderLimit);
+    } else if (forceSync && unitObj) {
+        processUnitCache(unitObj, activeCfg, activeType);
+        const finalData = window.unitBuildsCache[unitId]?.[activeType]?.[activeMode]?.[activeCfg];
+        if (finalData) container.innerHTML = renderListInternal(finalData, renderLimit);
+    } else {
+        container.innerHTML = `<div class="msg-loading"><div class="loading-spinner"></div><span>Calculating...</span></div>`;
+    }
+}
 
 function processUnitCache(unit, specificCfg = null, specificType = null) {
     if (!window.unitBuildsCache[unit.id]) {
-        window.unitBuildsCache[unit.id] = { 
-            base: { fixed: [null, null, null, null] }, 
-            abil: { fixed: [null, null, null, null] } 
+        window.unitBuildsCache[unit.id] = {
+            base: { fixed: [null, null, null, null] },
+            abil: { fixed: [null, null, null, null] }
         };
     }
-    
-    const CONFIGS = [{ head: false, subs: false }, { head: false, subs: true }, { head: true,  subs: false }, { head: true,  subs: true }];
+
+    const CONFIGS = [
+        { head: false, subs: false },
+        { head: false, subs: true  },
+        { head: true,  subs: false },
+        { head: true,  subs: true  }
+    ];
 
     const performCalcSet = (mode, useAbility, targetCache) => {
-        // Mode-based DoT/Crit overrides are no longer needed as they work by default now
         let dbKey = (unit.id === 'kirito' && kiritoState.card) ? 'kirito_card' : unit.id;
         if (useAbility && unit.ability) dbKey += '_abil';
-        
+
         const useInventory = (inventoryMode === true);
 
         for (let i = 0; i < 4; i++) {
             if (specificCfg !== null && i !== specificCfg) continue;
-            if (targetCache[i] !== null) {
-                // Already calculated, but if we are in dynamic mode and buff changed, we'd need to re-recalc.
-                // For now, assume if it's there, it's fine.
-                continue; 
-            }
+            if (targetCache[i] !== null) continue;
 
             const cfg = CONFIGS[i];
             let calculatedResults = [];
             let loadedFromStatic = false;
-            
+
             if (!useInventory) {
                 const isBambiAlt = (unit.id === 'bambietta' && bambiettaState.element !== 'Dark');
                 const isRobotAlt = (unit.id === 'robot1718' && robot1718State.mode !== 'Robot 17');
@@ -358,23 +334,22 @@ function processUnitCache(unit, specificCfg = null, specificType = null) {
                 if (canUseStatic && window.STATIC_BUILD_DB && window.STATIC_BUILD_DB[dbKey]) {
                     const dbTable = window.STATIC_BUILD_DB[dbKey];
                     const dbList = dbTable[mode] || dbTable[mode === 'fixed' ? 'f' : 'b'];
-                    if(dbList && dbList[i]) {
+                    if (dbList && dbList[i]) {
                         calculatedResults = dbList[i].map(r => ({...r}));
                         loadedFromStatic = true;
                     }
                 }
             }
 
-            // Recalculate static builds if ANY global buff is active
-            const anyGlobalBuff = window.mikuBuffActive || 
-                                window.enlightenedGodBuffActive || 
-                                window.bijuuLinkActive || 
-                                window.ancientMageSupportActive || 
-                                window.kingSailorMarkActive || 
-                                window.kingSailorBuffActive || 
-                                unit.id.includes('sasuke');
+            const anyGlobalBuff = window.mikuBuffActive ||
+                                  window.enlightenedGodBuffActive ||
+                                  window.bijuuLinkActive ||
+                                  window.ancientMageSupportActive ||
+                                  window.kingSailorMarkActive ||
+                                  window.kingSailorBuffActive ||
+                                  unit.id.includes('sasuke');
 
-           if (loadedFromStatic && anyGlobalBuff && typeof reconstructMathData === 'function') {
+            if (loadedFromStatic && anyGlobalBuff && typeof reconstructMathData === 'function') {
                 const traitCounts = {};
                 const subset = [];
                 calculatedResults.forEach((res, index) => {
@@ -386,62 +361,72 @@ function processUnitCache(unit, specificCfg = null, specificType = null) {
                 calculatedResults.forEach(entry => {
                     try {
                         const newRes = reconstructMathData(entry);
-                        if (newRes) { entry.dps = newRes.total; entry.dmgVal = newRes.dmgVal * (newRes.critData ? newRes.critData.avgMult : 1); entry.spa = newRes.spa; entry.range = newRes.range; }
+                        if (newRes) {
+                            entry.dps = newRes.total;
+                            entry.dmgVal = newRes.dmgVal * (newRes.critData ? newRes.critData.avgMult : 1);
+                            entry.spa = newRes.spa;
+                            entry.range = newRes.range;
+                        }
                     } catch (e) { console.warn("Buff recalc error", e); }
                 });
                 calculatedResults.sort((a, b) => b.dps - a.dps);
             }
-            
+
             calculatedResults.forEach(r => { if (r.id) window.cachedResults[r.id] = r; });
-            // Force full dynamic calculation for Sasuke to ensure Biju Head builds are generated for all traits
-            const traitsForCalc = (calculatedResults.length > 0 && !unit.id.includes('sasuke')) ? [...(typeof customTraits !== 'undefined' ? customTraits : []), ...(unitSpecificTraits[unit.id] || [])] : null;
+
+            const traitsForCalc = (calculatedResults.length > 0 && !unit.id.includes('sasuke'))
+                ? [...(typeof customTraits !== 'undefined' ? customTraits : []), ...(unitSpecificTraits[unit.id] || [])]
+                : null;
+
             if (traitsForCalc === null || traitsForCalc.length > 0 || useInventory) {
-                const dynamicResults = calculateUnitBuilds(unit, null, getFilteredBuilds(), getValidSubCandidates(), cfg.head ? ['sun_god', 'ninja', 'reaper_necklace', 'shadow_reaper_necklace', 'junior', 'biju_head'] : ['none'], cfg.subs, traitsForCalc, useAbility, mode);
+                const dynamicResults = calculateUnitBuilds(
+                    unit, null,
+                    getFilteredBuilds(),
+                    getValidSubCandidates(),
+                    cfg.head ? ['sun_god', 'ninja', 'reaper_necklace', 'shadow_reaper_necklace', 'junior', 'biju_head'] : ['none'],
+                    cfg.subs, traitsForCalc, useAbility, mode
+                );
                 calculatedResults = [...calculatedResults, ...dynamicResults];
             }
+
             targetCache[i] = calculatedResults;
         }
     };
 
-    // Efficiency: Only calculate the type we are actually looking at if requested
     if (!specificType || specificType === 'base') {
         performCalcSet('fixed', false, window.unitBuildsCache[unit.id].base.fixed);
     }
-    
+
     if (unit.ability && (!specificType || specificType === 'abil')) {
         performCalcSet('fixed', true, window.unitBuildsCache[unit.id].abil.fixed);
     }
 }
 
-// Helper to get score for sorting without full calculation
 window.getQuickScore = (unit) => {
     const isAbility = activeAbilityIds.has(unit.id) && unit.ability;
     let baseKey = (unit.id === 'kirito' && kiritoState.card) ? 'kirito_card' : unit.id;
     const dbKey = baseKey + (isAbility ? '_abil' : '');
-    
-    // Peek at static DB if available
+
     if (window.STATIC_BUILD_DB && window.STATIC_BUILD_DB[dbKey]) {
         const list = window.STATIC_BUILD_DB[dbKey]['fixed']?.[3];
         if (list && list.length > 0) {
             return unit.id === 'law' ? (list[0].range || 0) : list[0].dps;
         }
     }
-    // Fallback for newly added units not in Static DB
     if (unit.id === 'law') return unit.stats.range || 0;
-    return (unit.stats.dmg / unit.stats.spa) * 35; // Rough estimate of fully geared DPS scale
+    return (unit.stats.dmg / unit.stats.spa) * 35;
 };
 
 function renderDatabase() {
     const container = document.getElementById('dbPage');
     if (renderQueueIndex === 0) {
         container.innerHTML = '';
-        if (!window.STATIC_BUILD_DB) window.cachedResults = {}; 
+        if (!window.STATIC_BUILD_DB) window.cachedResults = {};
         window.unitBuildsCache = {};
     }
     if (renderQueueId) { cancelAnimationFrame(renderQueueId); renderQueueId = null; }
 
     const sortedUnits = unitDatabase.map(unit => {
-        // OPTIMIZATION: Do NOT process cache here. Use quick lookup for sort.
         return { unit, maxScore: getQuickScore(unit) };
     }).sort((a, b) => b.maxScore - a.maxScore);
 
@@ -449,45 +434,38 @@ function renderDatabase() {
         const startTime = performance.now();
         const fragment = document.createDocumentFragment();
         let itemsAdded = 0;
-        let staggerIndex = 0; 
+        let staggerIndex = 0;
 
         while (renderQueueIndex < sortedUnits.length) {
             const unit = sortedUnits[renderQueueIndex].unit;
-            
             renderQueueIndex++;
 
-let abilityLabel = (unit.ability && unit.ability.abilityName) ? unit.ability.abilityName : 'Ability';
-let toggleScript = '';
+            let abilityLabel = (unit.ability && unit.ability.abilityName) ? unit.ability.abilityName : 'Ability';
+            let toggleScript = '';
 
-if (unit.id === 'phantom_captain') abilityLabel = 'Planes';
-else if (unit.id === 'megumin') abilityLabel = 'Passive';
-else if (unit.id === 'vegeta') abilityLabel = 'Boss Stacks';
+            if (unit.id === 'phantom_captain') abilityLabel = 'Planes';
+            else if (unit.id === 'megumin') abilityLabel = 'Passive';
+            else if (unit.id === 'vegeta') abilityLabel = 'Boss Stacks';
             else if (unit.id === 'nutaru_beast') abilityLabel = 'Beast Mode';
             else if (unit.id === 'ancient_shinob') abilityLabel = 'Reanimation';
-else if (unit.id === 'super_roku') abilityLabel = 'Same Enemy';
-// --- ADD THIS BLOCK FOR ANCIENT MAGE ---
-else if (unit.id === 'ancient_mage') {
-    const isToggled = activeAbilityIds.has(unit.id);
-    abilityLabel = isToggled ? 'DPS' : 'Specialist';
-    toggleScript = `; 
-        this.parentElement.previousElementSibling.innerText = this.checked ? 'DPS' : 'Specialist';
-    `;
-}
-// --- ADD THIS BLOCK FOR CELL ---
-else if (unit.id === 'cell') {
-    const isToggled = activeAbilityIds.has(unit.id);
-    abilityLabel = isToggled ? 'Perfect Form' : 'True Form';
-    
-    // We add a style to the previous buttons container to give this text more room
-    toggleScript = `; 
-        this.parentElement.previousElementSibling.innerText = this.checked ? 'Perfect Form' : 'True Form';
-        this.closest('.unit-toolbar').firstElementChild.style.gap = '2px';
-    `;
-}
-            
-            const abilityToggleHtml = (unit.ability && !unit.ability.noToggle) ? `<div class="toggle-wrapper"><span class="ut-ability-text" title="${abilityLabel}">${abilityLabel}</span><label><input type="checkbox" class="ability-cb" ${activeAbilityIds.has(unit.id) ? 'checked' : ''} onchange="toggleAbility('${unit.id}', this)${toggleScript}"><div class="mini-switch"></div></label></div>` : '<div></div>';
+            else if (unit.id === 'super_roku') abilityLabel = 'Same Enemy';
+            else if (unit.id === 'ancient_mage') {
+                const isToggled = activeAbilityIds.has(unit.id);
+                abilityLabel = isToggled ? 'DPS' : 'Specialist';
+                toggleScript = `; this.parentElement.previousElementSibling.innerText = this.checked ? 'DPS' : 'Specialist';`;
+            }
+            else if (unit.id === 'cell') {
+                const isToggled = activeAbilityIds.has(unit.id);
+                abilityLabel = isToggled ? 'Perfect Form' : 'True Form';
+                toggleScript = `; this.parentElement.previousElementSibling.innerText = this.checked ? 'Perfect Form' : 'True Form'; this.closest('.unit-toolbar').firstElementChild.style.gap = '2px';`;
+            }
+
+            const abilityToggleHtml = (unit.ability && !unit.ability.noToggle)
+                ? `<div class="toggle-wrapper"><span class="ut-ability-text" title="${abilityLabel}">${abilityLabel}</span><label><input type="checkbox" class="ability-cb" ${activeAbilityIds.has(unit.id) ? 'checked' : ''} onchange="toggleAbility('${unit.id}', this)${toggleScript}"><div class="mini-switch"></div></label></div>`
+                : '<div></div>';
+
             const topControls = `<div class="unit-toolbar"><div class="ut-actions"><button class="calc-btn ut-btn-compact" onclick="openCalc('${unit.id}')">🖩 Custom</button><button class="calc-btn ut-btn-compact" onclick="openTraitBestList('${unit.id}')" title="Best Build per Trait">📊 Traits</button><button class="calc-btn ut-btn-compact" onclick="openUnitInfo('${unit.id}')">ⓘ Info</button></div>${abilityToggleHtml}</div>`;
-            
+
             let defaultSort = 'dps';
             if (['sjw', 'esdeath'].includes(unit.id)) defaultSort = 'damage';
             else if (unit.id === 'law') defaultSort = 'range';
@@ -510,7 +488,12 @@ else if (unit.id === 'cell') {
                 </div>`;
 
             let mainContent = '';
-            ['base', 'abil'].forEach(type => { const mode = 'fixed'; for(let cfg=0; cfg<4; cfg++) mainContent += `<div class="top-builds-list build-list-container mode-${type} mode-${mode} cfg-${cfg}" id="results-${type}-${mode}-${cfg}-${unit.id}"></div>`; });
+            ['base', 'abil'].forEach(type => {
+                const mode = 'fixed';
+                for (let cfg = 0; cfg < 4; cfg++) {
+                    mainContent += `<div class="top-builds-list build-list-container mode-${type} mode-${mode} cfg-${cfg}" id="results-${type}-${mode}-${cfg}-${unit.id}"></div>`;
+                }
+            });
 
             const card = createBaseUnitCard(unit, {
                 id: 'card-' + unit.id,
@@ -519,15 +502,16 @@ else if (unit.id === 'cell') {
                 topControls, bottomControls, mainContent
             });
 
-            card.style.setProperty('--stagger-delay', `${staggerIndex * 50}ms`); 
-            staggerIndex++; fragment.appendChild(card); itemsAdded++;
+            card.style.setProperty('--stagger-delay', `${staggerIndex * 50}ms`);
+            staggerIndex++;
+            fragment.appendChild(card);
+            itemsAdded++;
             if (performance.now() - startTime > 12) break;
         }
-        
+
         if (itemsAdded > 0) {
             container.appendChild(fragment);
-            
-            // PERFORMANCE: Use IntersectionObserver to lazy-load builds only when visible
+
             if (!window.buildLoadObserver) {
                 window.buildLoadObserver = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
@@ -535,10 +519,7 @@ else if (unit.id === 'cell') {
                         if (entry.isIntersecting) {
                             window.visibleUnitIds.add(unitId);
                             const unit = unitDatabase.find(u => u.id === unitId);
-                            if (unit) {
-                                updateBuildListDisplay(unitId, false, 50);
-                            }
-                            // Don't unobserve! We need to know when it leaves to keep DOM lean
+                            if (unit) updateBuildListDisplay(unitId, false, 50);
                             entry.target.classList.remove('lazy-build-load');
                         } else {
                             window.visibleUnitIds.delete(unitId);
@@ -547,18 +528,20 @@ else if (unit.id === 'cell') {
                     });
                 }, { rootMargin: '200px' });
             }
-            
+
             const newCards = container.querySelectorAll('.lazy-build-load');
             newCards.forEach(c => window.buildLoadObserver.observe(c));
         }
 
-        if (renderQueueIndex < sortedUnits.length) renderQueueId = requestAnimationFrame(processNextChunk);
-        else {
+        if (renderQueueIndex < sortedUnits.length) {
+            renderQueueId = requestAnimationFrame(processNextChunk);
+        } else {
             renderQueueId = null;
-            if(document.getElementById('globalHeadPiece').checked) document.body.classList.add('show-head');
-            if(document.getElementById('globalSubStats').checked) document.body.classList.add('show-subs');
+            if (document.getElementById('globalHeadPiece').checked) document.body.classList.add('show-head');
+            if (document.getElementById('globalSubStats').checked) document.body.classList.add('show-subs');
         }
     }
+
     processNextChunk();
 }
 
@@ -566,7 +549,7 @@ function setGuideMode(mode) {
     currentGuideMode = mode;
     const isFixed = (mode === 'fixed');
     const warning = document.getElementById('guideWarning');
-    if(warning) warning.classList[mode === 'current' ? 'remove' : 'add']('hidden');
+    if (warning) warning.classList[mode === 'current' ? 'remove' : 'add']('hidden');
 }
 
 function populateGuideDropdowns() {
@@ -588,7 +571,7 @@ function openGuideConfig() {
 
 const closeGuideConfig = () => toggleModal('guideConfigModal', false);
 
-const selectGuideUnit = (id) => { 
+const selectGuideUnit = (id) => {
     if (id === 'all') {
         tempGuideUnitSet.clear();
         tempGuideUnitSet.add('all');
@@ -597,7 +580,7 @@ const selectGuideUnit = (id) => {
         if (tempGuideUnitSet.has(id)) tempGuideUnitSet.delete(id); else tempGuideUnitSet.add(id);
         if (tempGuideUnitSet.size === 0) tempGuideUnitSet.add('all');
     }
-    renderGuideConfigUI(); 
+    renderGuideConfigUI();
 };
 
 const selectGuideTrait = (id) => { tempGuideTrait = id; renderGuideConfigUI(); };
@@ -609,7 +592,7 @@ function renderGuideConfigUI() {
 
     let unitsHtml = `<div class="config-item ${isAll ? 'selected' : ''}" onclick="selectGuideUnit('all')"><div class="cp-avatar-placeholder">ALL</div><span>All Units</span></div>`;
     unitDatabase.forEach(u => {
-        const isSelected = tempGuideUnitSet.has(u.id); 
+        const isSelected = tempGuideUnitSet.has(u.id);
         unitsHtml += `<div class="config-item ${isSelected ? 'selected' : ''}" onclick="selectGuideUnit('${u.id}')">${getUnitImgHtml(u, '', 'small')}<span>${u.name}</span></div>`;
     });
     unitGrid.innerHTML = unitsHtml;
@@ -620,7 +603,7 @@ function renderGuideConfigUI() {
         if (unitSpecificTraits[singleId]) availableTraits = [...availableTraits, ...unitSpecificTraits[singleId]];
     }
     availableTraits = availableTraits.filter((t, index, self) => index === self.findIndex((x) => x.id === t.id) && t.id !== 'none');
-    
+
     let traitsHtml = `<div class="config-chip ${tempGuideTrait === 'auto' ? 'selected' : ''}" onclick="selectGuideTrait('auto')">Auto (Best)</div>`;
     availableTraits.forEach(t => traitsHtml += `<div class="config-chip ${tempGuideTrait === t.id ? 'selected' : ''}" onclick="selectGuideTrait('${t.id}')">${t.name}</div>`);
     traitList.innerHTML = traitsHtml;
@@ -634,19 +617,23 @@ const applyGuideConfig = () => {
         unitSelect.value = 'all';
     } else {
         const count = guideUnitSelection.size;
-        const text = count === 1 ? unitDatabase.find(u => u.id === Array.from(guideUnitSelection)[0]).name : `${count} Units Selected`;
+        const text = count === 1
+            ? unitDatabase.find(u => u.id === Array.from(guideUnitSelection)[0]).name
+            : `${count} Units Selected`;
         unitSelect.innerHTML = `<option value="multi">${text}</option>`;
         unitSelect.value = 'multi';
     }
     document.getElementById('guideTraitSelect').value = tempGuideTrait;
-    renderGuides(); 
+    renderGuides();
     closeGuideConfig();
 };
 
 function getGuideBuildsFromCache(unit, mode, configIndex) {
     if (!unitBuildsCache || !unitBuildsCache[unit.id]) return [];
     let source = unitBuildsCache[unit.id].base;
-    if (unit.ability !== undefined && activeAbilityIds.has(unit.id) && unitBuildsCache[unit.id].abil && unitBuildsCache[unit.id].abil[mode]) source = unitBuildsCache[unit.id].abil;
+    if (unit.ability !== undefined && activeAbilityIds.has(unit.id) && unitBuildsCache[unit.id].abil && unitBuildsCache[unit.id].abil[mode]) {
+        source = unitBuildsCache[unit.id].abil;
+    }
     return source?.[mode]?.[configIndex] || [];
 }
 
@@ -659,7 +646,6 @@ function processGuideTop3(rawBuilds, unit, traitFilterId) {
         if (targetName) filtered = filtered.filter(b => b.traitName === targetName);
     }
 
-    // SJW Sun God Weighting (Match Database Logic)
     const getWeight = (b) => {
         if (unit.id === 'sjw' && b.headUsed === 'sun_god') return 1.05;
         if (unit.id.includes('sasuke') && b.headUsed === 'biju_head') return 1.2;
@@ -724,7 +710,12 @@ function updateGuideBuilds(unitId) {
     }
     if (traitLabel) traitLabel.innerText = `Best: ${best.traitName}`;
     if (listContainer) {
-        listContainer.innerHTML = builds.map((b, i) => generateBuildRowHTML(b, i, { totalCost: unit.totalCost || 50000, placement: unit.placement || 1, sortMode: 'dps', unitId: unit.id })).join('');
+        listContainer.innerHTML = builds.map((b, i) => generateBuildRowHTML(b, i, {
+            totalCost: unit.totalCost || 50000,
+            placement: unit.placement || 1,
+            sortMode: 'dps',
+            unitId: unit.id
+        })).join('');
     }
 }
 
@@ -732,7 +723,7 @@ function renderGuides() {
     const guideGrid = document.getElementById('guideList');
     if (!guideGrid) return;
     guideGrid.innerHTML = '';
-    
+
     const filterTraitId = document.getElementById('guideTraitSelect').value;
 
     let uName = 'All Units';
@@ -745,30 +736,28 @@ function renderGuides() {
     }
 
     let tName = 'Auto Trait';
-    if(filterTraitId !== 'auto') { 
+    if (filterTraitId !== 'auto') {
         const found = getTraitById(filterTraitId);
-        if(found) tName = found.name; 
+        if (found) tName = found.name;
     }
-    document.getElementById('dispGuideUnit').innerText = uName; 
+    document.getElementById('dispGuideUnit').innerText = uName;
     document.getElementById('dispGuideTrait').innerText = tName;
 
-    // Determine Active State
     const activeMode = 'fixed';
     const activeCfg = (showHead ? 2 : 0) + (showSubs ? 1 : 0);
 
-    const unitsToProcess = (guideUnitSelection.has('all')) ? [...unitDatabase] : unitDatabase.filter(u => guideUnitSelection.has(u.id));
-    
-    // Sort Build Guides by DPS (Quick Score) to match Unit Database
+    const unitsToProcess = guideUnitSelection.has('all')
+        ? [...unitDatabase]
+        : unitDatabase.filter(u => guideUnitSelection.has(u.id));
+
     unitsToProcess.sort((a, b) => getQuickScore(b) - getQuickScore(a));
-    
-    // Create card skeletons
+
     const fragment = document.createDocumentFragment();
     unitsToProcess.forEach(unit => {
         fragment.appendChild(createGuideCard(unit, `mode-${activeMode} cfg-${activeCfg}`));
     });
     guideGrid.appendChild(fragment);
 
-    // PERFORMANCE: Reuse observer for guides
     if (!window.guideLoadObserver) {
         window.guideLoadObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -784,8 +773,10 @@ function renderGuides() {
 
     const newGuides = guideGrid.querySelectorAll('.lazy-guide-load');
     newGuides.forEach(g => window.guideLoadObserver.observe(g));
-    
-    if (guideGrid.children.length === 0) guideGrid.innerHTML = `<div class="msg-empty">No guides found. Database may still be calculating.</div>`;
+
+    if (guideGrid.children.length === 0) {
+        guideGrid.innerHTML = `<div class="msg-empty">No guides found. Database may still be calculating.</div>`;
+    }
 }
 
 function openTraitBestList(unitId) {
@@ -794,7 +785,7 @@ function openTraitBestList(unitId) {
 
     const mode = 'fixed';
     const type = activeAbilityIds.has(unitId) && unit.ability ? 'abil' : 'base';
-    
+
     const showHead = document.body.classList.contains('show-head');
     const showSubs = document.body.classList.contains('show-subs');
     let cfgIndex = 0;
@@ -804,7 +795,7 @@ function openTraitBestList(unitId) {
     else if (showHead && showSubs) cfgIndex = 3;
 
     const allBuilds = window.unitBuildsCache[unitId]?.[type]?.[mode]?.[cfgIndex] || [];
-    
+
     if (allBuilds.length === 0) {
         showUniversalModal({
             title: 'TRAIT LEADERBOARD',
@@ -823,10 +814,7 @@ function openTraitBestList(unitId) {
             const isRange = (unitId === 'law');
             const valBuild = isRange ? (build.range || 0) : build.dps;
             const valCurrent = isRange ? (current.range || 0) : current.dps;
-            
-            if (valBuild > valCurrent) {
-                bestByTrait.set(build.traitName, build);
-            }
+            if (valBuild > valCurrent) bestByTrait.set(build.traitName, build);
         }
     });
 
@@ -853,9 +841,7 @@ function openTraitBestList(unitId) {
             <img src="${unit.img}" style="width: 110%; height: 110%; object-fit: cover;">
         </div>
         <div style="flex: 1;">
-            <div class="text-xl font-bold text-white leading-tight" style="display: flex; align-items: center; gap: 8px; letter-spacing: -0.5px;">
-                ${unit.name}
-            </div>
+            <div class="text-xl font-bold text-white leading-tight" style="display: flex; align-items: center; gap: 8px; letter-spacing: -0.5px;">${unit.name}</div>
             <div class="text-xs text-dim font-bold" style="margin-top: 2px; text-transform: uppercase; letter-spacing: 1px;">${unit.role} ${unit.stats.element ? `• ${unit.stats.element}` : ''}</div>
             ${tagsHtml ? `<div style="margin-top: 8px; display: flex; gap: 6px;">${tagsHtml}</div>` : ''}
         </div>
@@ -886,31 +872,31 @@ function openTraitBestList(unitId) {
         const val = isRange ? (b.range || 0).toFixed(1) : format(b.dps);
         const label = isRange ? 'RNG' : 'DPS';
         const labelClass = isRange ? 'comp-val-rng' : 'comp-val-dps';
-        
-        // Trait Visuals
+
         const tObj = getTraitByName(b.traitName, unitId);
         const traitImg = tObj ? `<div class="trait-img-rainbow" style="width: 22px; height: 22px; margin-right: 10px; flex-shrink: 0;"><img src="images/traits/${tObj.name}.png" onerror="this.parentElement.style.display='none'"></div>` : '';
 
-        let headText = (b.headUsed && b.headUsed !== 'none') ? ` + ${({'sun_god':'Sun God','ninja':'Ninja','reaper_necklace':'Reaper','shadow_reaper_necklace':'S.Reaper'})[b.headUsed] || 'Head'}` : '';
+        let headText = (b.headUsed && b.headUsed !== 'none')
+            ? ` + ${({'sun_god':'Sun God','ninja':'Ninja','reaper_necklace':'Reaper','shadow_reaper_necklace':'S.Reaper'})[b.headUsed] || 'Head'}`
+            : '';
         const setupText = `<b class="text-white">${b.setName}</b> <span class="text-dim text-xs">(${mapStat(b.mainStats.body)}/${mapStat(b.mainStats.legs)})</span>${headText}`;
-        
+
         let rowStyle = '';
         let rankStyle = 'opacity: 0.6; font-size: 0.85em; font-family: monospace;';
-        
+
         if (idx === 0) {
             rankStyle = 'color: #fbbf24; font-weight: 900; font-size: 1.2em; text-shadow: 0 0 10px rgba(251, 191, 36, 0.4);';
             rowStyle = 'background: rgba(251, 191, 36, 0.04);';
+        } else if (idx === 1) {
+            rankStyle = 'color: #e2e8f0; font-weight: 800; font-size: 1.1em;';
+        } else if (idx === 2) {
+            rankStyle = 'color: #b45309; font-weight: 800; font-size: 1.1em;';
         }
-        else if (idx === 1) rankStyle = 'color: #e2e8f0; font-weight: 800; font-size: 1.1em;';
-        else if (idx === 2) rankStyle = 'color: #b45309; font-weight: 800; font-size: 1.1em;';
 
         html += `<tr style="${rowStyle}">
             <td style="text-align: center; vertical-align: middle; padding: 10px 5px;"><span style="${rankStyle}">#${idx + 1}</span></td>
             <td style="vertical-align: middle; padding: 10px 5px;">
-                <div style="display: flex; align-items: center;">
-                    ${traitImg}
-                    <span class="comp-tag" style="margin: 0; font-weight: 700; font-size: 0.85rem;">${b.traitName}</span>
-                </div>
+                <div style="display: flex; align-items: center;">${traitImg}<span class="comp-tag" style="margin: 0; font-weight: 700; font-size: 0.85rem;">${b.traitName}</span></div>
             </td>
             <td style="vertical-align: middle; padding: 10px 5px;">
                 <div class="text-sm">${setupText}</div>
